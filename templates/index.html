@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Pet Adoption System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 Pet Adoption System</h1>
+            <p>Modern Web-Based Pet Management Platform</p>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="mainMenu" class="main-menu">
+            <div class="menu-card" onclick="showSection('petManagement')">
+                <div class="icon">🐕</div>
+                <h3>Pet Management</h3>
+                <p>Register, view, and manage pets. Update training and interact virtually with our furry friends.</p>
+            </div>
+            
+            <div class="menu-card" onclick="showSection('staffScheduling')">
+                <div class="icon">👥</div>
+                <h3>Staff Scheduling</h3>
+                <p>Manage staff members, schedules, and role assignments for optimal shelter operations.</p>
+            </div>
+            
+            <div class="menu-card" onclick="showSection('adoptionCenter')">
+                <div class="icon">🏠</div>
+                <h3>Adoption Center</h3>
+                <p>Process adoption applications, match pets with families, and manage compatibility.</p>
+            </div>
+            
+            <div class="menu-card" onclick="showSection('petStore')">
+                <div class="icon">🛒</div>
+                <h3>Pet Store</h3>
+                <p>Direct pet sales, customer management, and transaction processing for retail operations.</p>
+            </div>
+            
+            <div class="menu-card" onclick="showSection('outreachPrograms')">
+                <div class="icon">🌟</div>
+                <h3>Outreach Programs</h3>
+                <p>Community events, educational programs, and volunteer coordination activities.</p>
+            </div>
+            
+            <div class="menu-card" onclick="showSection('reports')">
+                <div class="icon">📊</div>
+                <h3>Reports & Analytics</h3>
+                <p>Comprehensive reports, statistics, and performance metrics for data-driven decisions.</p>
+            </div>
+        </div>
+
+        <!-- Pet Management Section -->
+        <div id="petManagement" class="content-area" style="display: none;">
+            <div class="section-header">
+                <h2>🐕 Pet Management</h2>
+                <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPets">0</div>
+                    <div class="stat-label">Total Pets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="availablePets">0</div>
+                    <div class="stat-label">Available</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="adoptedPets">0</div>
+                    <div class="stat-label">Adopted</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avgHappiness">0%</div>
+                    <div class="stat-label">Avg Happiness</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <button class="btn" onclick="showAddPetModal()">+ Add New Pet</button>
+                <button class="btn btn-success" onclick="generateSamplePets()">Generate Sample Data</button>
+            </div>
+
+            <div id="petsList">
+                <!-- Pets will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Add Pet Modal -->
+        <div id="addPetModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addPetModal')">&times;</span>
+                <h2>🐾 Register New Pet</h2>
+                <form id="addPetForm">
+                    <div class="form-group">
+                        <label for="petName">Pet Name:</label>
+                        <input type="text" id="petName" name="petName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petSpecies">Species:</label>
+                        <select id="petSpecies" name="petSpecies" required>
+                            <option value="">Select Species</option>
+                            <option value="Dog">Dog</option>
+                            <option value="Cat">Cat</option>
+                            <option value="Rabbit">Rabbit</option>
+                            <option value="Guinea Pig">Guinea Pig</option>
+                            <option value="Bird">Bird</option>
+                            <option value="Hamster">Hamster</option>
+                            <option value="Ferret">Ferret</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petAge">Age (years):</label>
+                        <input type="number" id="petAge" name="petAge" min="0" max="20" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petWeight">Weight (lbs):</label>
+                        <input type="number" id="petWeight" name="petWeight" min="1" max="200" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petPersonality">Personality:</label>
+                        <select id="petPersonality" name="petPersonality" required>
+                            <option value="">Select Personality</option>
+                            <option value="Adventure Paws">Adventure Paws</option>
+                            <option value="Cuddle Champion">Cuddle Champion</option>
+                            <option value="Zen Master">Zen Master</option>
+                            <option value="Playful Spirit">Playful Spirit</option>
+                            <option value="Gentle Guardian">Gentle Guardian</option>
+                            <option value="Curious Explorer">Curious Explorer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="petPrice">Price ($):</label>
+                        <input type="number" id="petPrice" name="petPrice" min="0" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="forSale" name="forSale"> Available for Direct Sale
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn">Register Pet</button>
+                    <button type="button" class="btn btn-danger" onclick="closeModal('addPetModal')">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Pet Interaction Modal -->
+        <div id="interactionModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('interactionModal')">&times;</span>
+                <div id="interactionContent">
+                    <!-- Interaction content will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Pet Training Modal -->
+        <div id="trainingModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('trainingModal')">&times;</span>
+                <div id="trainingContent">
+                    <!-- Training content will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Other sections -->
+        <div id="staffScheduling" class="content-area" style="display: none;">
+            <div class="section-header">
+                <h2>👥 Staff Scheduling</h2>
+                <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
+            </div>
+            <button class="btn" onclick="showAddStaffModal()">+ Add Staff Member</button>
+            <div id="staffList"></div>
+        </div>
+        <div id="addStaffModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addStaffModal')">&times;</span>
+                <h2>Add Staff Member</h2>
+                <form id="addStaffForm">
+                    <div class="form-group"><label>Name:<input type="text" id="staffName" required></label></div>
+                    <div class="form-group"><label>Role:
+                        <select id="staffRole" required>
+                            <option value="">Select Role</option>
+                            <option value="Veterinarian">Veterinarian</option>
+                            <option value="Caretaker">Caretaker</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Volunteer">Volunteer</option>
+                            <option value="Receptionist">Receptionist</option>
+                        </select>
+                    </label></div>
+                    <div class="form-group"><label>Experience (years):<input type="number" id="staffExperience" min="0" required></label></div>
+                    <div class="form-group"><label>Specialty:<input type="text" id="staffSpecialty" required></label></div>
+                    <div class="form-group"><label>Shift:<input type="text" id="staffShift" required></label></div>
+                    <div class="form-group"><label>Email:<input type="email" id="staffEmail" required></label></div>
+                    <div class="form-group"><label>Phone:<input type="text" id="staffPhone" required></label></div>
+                    <div class="form-group"><label>Salary ($):<input type="number" id="staffSalary" min="0" required></label></div>
+                    <button type="submit" class="btn">Add Staff</button>
+                    <button type="button" class="btn btn-danger" onclick="closeModal('addStaffModal')">Cancel</button>
+                </form>
+            </div>
+        </div>
+        <div id="adoptionCenter" class="content-area" style="display: none;">
+            <div class="section-header">
+                <h2>🏠 Adoption Center</h2>
+                <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
+            </div>
+            <button class="btn" onclick="showAddAdopterModal()">+ Add Adopter</button>
+            <div id="adoptersList"></div>
+        </div>
+        <div id="addAdopterModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addAdopterModal')">&times;</span>
+                <h2>Add Adopter</h2>
+                <form id="addAdopterForm">
+                    <div class="form-group"><label>Name:<input type="text" id="adopterName" required></label></div>
+                    <div class="form-group"><label>Email:<input type="email" id="adopterEmail" required></label></div>
+                    <div class="form-group"><label>Phone:<input type="text" id="adopterPhone" required></label></div>
+                    <div class="form-group"><label>Experience:<input type="text" id="adopterExperience" required></label></div>
+                    <div class="form-group"><label>Preferred Species:<input type="text" id="adopterPreferredSpecies" required></label></div>
+                    <div class="form-group"><label>Budget ($):<input type="number" id="adopterBudget" min="0" required></label></div>
+                    <div class="form-group"><label>Living Situation:<input type="text" id="adopterLivingSituation" required></label></div>
+                    <div class="form-group"><label>Family Size:<input type="number" id="adopterFamilySize" min="1" required></label></div>
+                    <div class="form-group"><label>Has Other Pets:
+                        <select id="adopterHasOtherPets" required>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </label></div>
+                    <button type="submit" class="btn">Add Adopter</button>
+                    <button type="button" class="btn btn-danger" onclick="closeModal('addAdopterModal')">Cancel</button>
+                </form>
+            </div>
+        </div>
+        <div id="petStore" class="content-area" style="display: none;">
+            <div class="section-header">
+                <h2>🛒 Pet Store</h2>
+                <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
+            </div>
+            <div id="storeItemsList"></div>
+        </div>
+        <div id="outreachPrograms" class="content-area" style="display: none;">
+            <div class="section-header">
+                <h2>🌟 Outreach Programs</h2>
+                <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
+            </div>
+            <div id="outreachList"></div>
+        </div>
+        <div id="reports" class="content-area" style="display: none;">
+            <div class="section-header">
+                <h2>📊 Reports & Analytics</h2>
+                <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
+            </div>
+            <div id="reportsList"></div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
